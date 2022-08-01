@@ -17,7 +17,7 @@ int main(int argc, char** argv)
     std::memset(&hints, 0, sizeof hints);
 
     hints.ai_family = AF_INET;       // IPv4
-    hints.ai_socktype = SOCK_STREAM; // Forgot
+    hints.ai_socktype = SOCK_STREAM; // TCP
     hints.ai_flags = AI_PASSIVE;     // Listen on this computer
 
     int getaddrinfo_status = getaddrinfo(nullptr, "80", &hints, &server_info);

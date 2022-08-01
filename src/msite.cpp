@@ -67,13 +67,13 @@ int main(int argc, char** argv)
         exit(1);
     }
 
-    char buffer[101];
+    char buffer[5001];
 
-    int recv_bytes = recv(their_fd, buffer, 100, 0);
+    int recv_bytes = recv(their_fd, buffer, 5000, 0);
 
-    buffer[100] = '\n';
+    buffer[5000] = '\n';
 
-    std::cout << "Received: \n" << buffer << std::endl;
+    std::cout << "Received:\n" << buffer << std::endl;
 
     if (close(their_fd) == -1)
     {

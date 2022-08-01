@@ -12,24 +12,25 @@ BIN_DIR := bin
 CXX := g++
 #LD := ld
 
-CXX_FLAGS := -std=c++17 -O3 -Wall -Wextra -DMAJOR_VERSION=$(MAJOR_VERSION) -DMINOR_VERSION=$(MINOR_VERSION)-D -DPATCH_VERSION=$(PATCH_VERSION)
+CXX_FLAGS := -std=c++17 -O0 -Wall -Wextra -DMAJOR_VERSION=$(MAJOR_VERSION) -DMINOR_VERSION=$(MINOR_VERSION)-D -DPATCH_VERSION=$(PATCH_VERSION)
 LD_FLAGS :=
 
 CXX_SOURCES := \
-	msite.cpp
+	msite.cpp \
+	ServerCore.cpp \
 
 OBJ = $(CXX_SOURCES:%.cpp=$(OBJ_DIR)/%.cpp.o)
 DEP = $(OBJ:%.o=%.d)
 
 .PHONY: all clean install
 
-all: $(OBJ)
+all: $(OBJ) Makefile
 	mkdir -p $(BIN_DIR)
-	$(CXX) $(LDFLAGS) -o $(BIN_DIR)/msite $(OBJ)
+	$(CXX) $(LD_FLAGS) -o $(BIN_DIR)/msite $(OBJ)
 
-$(OBJ_DIR)/%.cpp.o: $(SRC_DIR)/%.cpp
+$(OBJ_DIR)/%.cpp.o: $(SRC_DIR)/%.cpp Makefile
 	mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) -MMD -c $< -o $@
+	$(CXX) $(CXX_FLAGS) -MMD -c $< -o $@
 
 install:
 	@echo "To be made lol"

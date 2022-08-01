@@ -61,6 +61,12 @@ int main(int argc, char** argv)
 
     int their_fd = accept(sockfd, reinterpret_cast<struct sockaddr*>(&their_addr), &addr_size);
 
+    if (their_fd == -1)
+    {
+        std::cout << "Failed to accept a connection: " << strerror(errno) << std::endl;
+        exit(1);
+    }
+
     char buffer[101];
 
     int recv_bytes = recv(their_fd, buffer, 100, 0);

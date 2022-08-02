@@ -33,7 +33,7 @@ ServerCore::ServerCore()
         exit(1);
     }
 
-    int dummy;
+    int dummy = 1;
     int setsockopt_status = setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &dummy, sizeof dummy);
 
     if (setsockopt_status == -1)
@@ -71,10 +71,8 @@ ServerCore::~ServerCore()
 {
     shutdown_signal = true;
 
-    if (shutdown(connection, SHUT_RDWR) == -1)
-    {
-        std::cout << "Failed to close their file descriptor: " << strerror(errno) << std::endl;
-    }
+    // Close all connections
+    connections.clear();
 
     if (shutdown(server_fd, SHUT_RDWR) == -1)
     {
@@ -83,6 +81,7 @@ ServerCore::~ServerCore()
 
     accept_connections_thread.join();
 
+    // Can be free'd earlier?
     freeaddrinfo(server_info);
 }
 
@@ -105,34 +104,29 @@ void ServerCore::accept_connections()
         }
         else
         {
-            // Mutex
-            //connections.push_back(client_fd);
-            connection = client_fd;
+            std::lock_guard<std::mutex> guard(connections_mutex);
+            connections.emplace_back(std::make_unique<ClientConnection>(client_fd));
         }
     }
 }
 
 void ServerCore::handle_connections()
 {
-    char buffer[5001];
-    struct sockaddr_storage src_addr;
-    socklen_t addrlen = sizeof src_addr;
-
     while(1)
     {
-        if (connection != -1)
+        std::lock_guard<std::mutex> guard(connections_mutex);
+
+        for (auto it = connections.begin(); it != connections.end();)
         {
-            addrlen = sizeof src_addr;
-
-            int recv_bytes = recvfrom(connection, buffer, 5000, 0, reinterpret_cast<struct sockaddr*>(&src_addr), &addrlen);
-
-            (void) recv_bytes;
-
-            buffer[5000] = '\n';
-
-            std::cout << "Received:\n" << buffer << std::endl;
-
-            return;
+            std::unique_ptr<ClientConnection>& client = *it;
+            if (client->client_fd == -1)
+            {
+                it = connections.erase(it);
+            }
+            else
+            {
+                it++;
+            }
         }
     }
 }

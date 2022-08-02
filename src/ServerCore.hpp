@@ -1,9 +1,12 @@
 #ifndef SERVERCORE_HPP_
 #define SERVERCORE_HPP_
 
-//#include "Connection.hpp"
+#include "ClientConnection.hpp"
 
+#include <memory>
+#include <mutex>
 #include <thread>
+#include <vector>
 
 class ServerCore
 {
@@ -11,11 +14,12 @@ public:
     ServerCore();
     ~ServerCore();
 
+private:
     void accept_connections();
+    std::thread accept_connections_thread;
 
     void handle_connections();
 
-private:
     bool shutdown_signal = false;
 
     struct addrinfo* server_info = nullptr;
@@ -24,10 +28,9 @@ private:
 
     int server_fd = -1;
 
-    //std::vector<Connection> connections;
-    int connection = -1;
+    std::vector<std::unique_ptr<ClientConnection>> connections;
 
-    std::thread accept_connections_thread;
+    std::mutex connections_mutex;
 };
 
 #endif

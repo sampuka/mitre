@@ -10,7 +10,6 @@ OBJ_DIR := obj
 BIN_DIR := bin
 
 CXX := g++
-#LD := ld
 
 CXX_FLAGS := -std=c++17 -O0 -Wall -Wextra -DMAJOR_VERSION=$(MAJOR_VERSION) -DMINOR_VERSION=$(MINOR_VERSION)-D -DPATCH_VERSION=$(PATCH_VERSION)
 LD_FLAGS :=
@@ -18,6 +17,7 @@ LD_FLAGS :=
 CXX_SOURCES := \
 	msite.cpp \
 	ServerCore.cpp \
+	ClientConnection.cpp \
 
 OBJ = $(CXX_SOURCES:%.cpp=$(OBJ_DIR)/%.cpp.o)
 DEP = $(OBJ:%.o=%.d)

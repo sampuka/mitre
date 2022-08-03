@@ -2,8 +2,9 @@
 
 #include <sys/socket.h>
 #include <cstring>
-
 #include <iostream>
+#include <string>
+#include <vector>
 
 ClientConnection::ClientConnection(int client_fd_)
 {
@@ -60,7 +61,22 @@ void ClientConnection::connection_loop()
         {
             buffer[5000] = '\n';
 
-            std::string response = "HTTP/1.1 200 Yo\r\n\r\n<html><head></head><body>Hi</body></html>\r\n";
+            const std::string crlf = "\r\n";
+
+            std::string status_line = "HTTP/1.1 200 OK";
+
+            std::string message_body = "<html>\r\n<head>\r\n</head>\r\n<body>\r\nHi\r\n</body></html>";
+
+            std::vector<std::string> headers = {"Content-Length: " + std::to_string(message_body.size())};
+
+            std::string response = status_line + crlf;
+
+            for (const std::string& header : headers)
+            {
+                response += header + crlf;
+            }
+
+            response += crlf + message_body + crlf;
 
             ssize_t bytes_sent = send(client_fd, response.c_str(), response.size(), 0);
 

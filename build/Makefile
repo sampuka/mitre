@@ -1,4 +1,4 @@
-# Compiles the entirety of msite
+# Compiles the entirety of mitre
 
 MAJOR_VERSION := 0
 MINOR_VERSION := 1
@@ -11,13 +11,16 @@ BIN_DIR := bin
 
 CXX := g++
 
-CXX_FLAGS := -std=c++17 -O0 -Wall -Wextra -DMAJOR_VERSION=$(MAJOR_VERSION) -DMINOR_VERSION=$(MINOR_VERSION)-D -DPATCH_VERSION=$(PATCH_VERSION)
+CXX_FLAGS := -std=c++17 -O0 -Wall -Wextra -DMAJOR_VERSION=$(MAJOR_VERSION) -DMINOR_VERSION=$(MINOR_VERSION) -DPATCH_VERSION=$(PATCH_VERSION)
 LD_FLAGS :=
 
 CXX_SOURCES := \
-	msite.cpp \
+	mitre.cpp \
 	ServerCore.cpp \
 	ClientConnection.cpp \
+	Request.cpp \
+	Response.cpp \
+	util.cpp \
 
 OBJ = $(CXX_SOURCES:%.cpp=$(OBJ_DIR)/%.cpp.o)
 DEP = $(OBJ:%.o=%.d)
@@ -26,7 +29,7 @@ DEP = $(OBJ:%.o=%.d)
 
 all: $(OBJ) Makefile
 	mkdir -p $(BIN_DIR)
-	$(CXX) $(LD_FLAGS) -o $(BIN_DIR)/msite $(OBJ)
+	$(CXX) $(LD_FLAGS) -o $(BIN_DIR)/mitre $(OBJ)
 
 $(OBJ_DIR)/%.cpp.o: $(SRC_DIR)/%.cpp Makefile
 	mkdir -p $(@D)

@@ -1,5 +1,8 @@
 #include "ClientConnection.hpp"
 
+#include "Request.hpp"
+#include "Response.hpp"
+
 #include <sys/socket.h>
 #include <cstring>
 #include <iostream>
@@ -61,6 +64,10 @@ void ClientConnection::connection_loop()
         {
             buffer[5000] = '\n';
 
+            Request request(buffer);
+
+            Response response_(request);
+
             const std::string crlf = "\r\n";
 
             std::string status_line = "HTTP/1.1 200 OK";
@@ -80,7 +87,7 @@ void ClientConnection::connection_loop()
 
             ssize_t bytes_sent = send(client_fd, response.c_str(), response.size(), 0);
 
-            std::cout << "Received:\n" << buffer << "\nReponse:\n" << response;
+//            std::cout << "Received:\n" << buffer << "\nReponse:\n" << response;
             std::cout << "Response size: " << response.size() << " bytes_sent: " << bytes_sent << std::endl;
         }
     }

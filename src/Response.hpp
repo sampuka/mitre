@@ -9,6 +9,8 @@ public:
     Response() = delete;
     Response(Request request);
     ~Response();
+
+    std::string response_string;
 };
 
 #endif

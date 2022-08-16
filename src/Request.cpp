@@ -52,7 +52,23 @@ Request::Request(std::string request_string)
 
         std::cout << name << " = " << value << '\n';
 
-        if (name == "Connection")
+        if (name == "Host")
+        {
+            host = value;
+        }
+        else if (name == "User-Agent")
+        {
+            user_agent = value;
+        }
+        else if (name == "Accept")
+        {
+            accept_types = value;
+        }
+        else if (name == "Accept-Language")
+        {
+            accept_langs = value;
+        }
+        else if (name == "Connection")
         {
             connection_type = value;
         }

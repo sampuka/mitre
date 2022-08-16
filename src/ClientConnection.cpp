@@ -66,29 +66,14 @@ void ClientConnection::connection_loop()
 
             Request request(buffer);
 
-            Response response_(request);
+            Response response(request);
 
-            const std::string crlf = "\r\n";
+            std::string response_string = response.response_string;
 
-            std::string status_line = "HTTP/1.1 200 OK";
+            ssize_t bytes_sent = send(client_fd, response_string.c_str(), response_string.size(), 0);
 
-            std::string message_body = "<html>\r\n<head>\r\n</head>\r\n<body>\r\nHi\r\n</body></html>";
-
-            std::vector<std::string> headers = {"Content-Length: " + std::to_string(message_body.size())};
-
-            std::string response = status_line + crlf;
-
-            for (const std::string& header : headers)
-            {
-                response += header + crlf;
-            }
-
-            response += crlf + message_body + crlf;
-
-            ssize_t bytes_sent = send(client_fd, response.c_str(), response.size(), 0);
-
-//            std::cout << "Received:\n" << buffer << "\nReponse:\n" << response;
-            std::cout << "Response size: " << response.size() << " bytes_sent: " << bytes_sent << std::endl;
+            std::cout << "Received:\n" << buffer << "\nResponse:\n" << response_string;
+            std::cout << "Response size: " << response_string.size() << " bytes_sent: " << bytes_sent << std::endl;
         }
     }
 }

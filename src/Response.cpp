@@ -3,7 +3,6 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <vector>
 
 const std::string crlf = "\r\n";
 
@@ -13,8 +12,6 @@ Response::Response(const Request& request_) : request(request_)
     {
         construct_get_response();
     }
-
-    std::cout << response_string << std::endl;
 }
 
 Response::~Response()
@@ -30,11 +27,13 @@ void Response::construct_get_response()
         document_path = "/index.html";
     }
 
-    document_path = "www" + document_path;
+    document_path = document_path;
 
     std::string response_body;
 
-    std::ifstream document_file(document_path);
+    headers.clear();
+
+    std::ifstream document_file("www" + document_path);
 
     bool file_success = document_file.is_open();
 
@@ -45,10 +44,25 @@ void Response::construct_get_response()
         buffer << document_file.rdbuf();
 
         response_body = buffer.str();
+
+        if (document_path.ends_with(".html"))
+        {
+            content_type = "text/html";
+        }
+        else if (document_path.ends_with(".ico"))
+        {
+            content_type = "image/x-icon";
+        }
+        else
+        {
+            std::cout << "Serving content of unknown type!" << std::endl;
+        }
     }
     else
     {
-        std::ifstream not_found_document("www/404.html");
+        document_path = "/404.html";
+
+        std::ifstream not_found_document("www" + document_path);
 
         if (not_found_document.is_open())
         {
@@ -62,9 +76,15 @@ void Response::construct_get_response()
         {
             response_body = "<html><head><title>404 Not Found</title></head><body>404 404 Not Found Not Found</body></html>";
         }
+
+        content_type = "text/html";
     }
 
-    std::string status_line = "HTTP/1.1 ";
+    headers.push_back("Content-Length: " + std::to_string(response_body.size()));
+    headers.push_back("Content-Type: " + content_type);
+    headers.push_back("Content-Location: " + document_path);
+
+    status_line = "HTTP/1.1 ";
 
     if (file_success)
     {
@@ -75,8 +95,6 @@ void Response::construct_get_response()
         status_line += "404 Not Found";
     }
 
-    std::vector<std::string> headers = {"Content-Length: " + std::to_string(response_body.size())};
-
     response_string = status_line + crlf;
 
     for (const std::string& header : headers)
@@ -85,4 +103,14 @@ void Response::construct_get_response()
     }
 
     response_string += crlf + response_body + crlf;
+}
+
+void Response::print() const
+{
+    std::cout << status_line << '\n';
+
+    for (const std::string& header : headers)
+    {
+        std::cout << header << '\n';
+    }
 }

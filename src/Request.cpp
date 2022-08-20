@@ -50,8 +50,6 @@ Request::Request(std::string request_string)
 
         std::string value = header_field.substr(delim + 2, header_field.size());
 
-        std::cout << name << " = " << value << '\n';
-
         if (name == "Host")
         {
             host = value;
@@ -73,8 +71,6 @@ Request::Request(std::string request_string)
             connection_type = value;
         }
     }
-
-    std::cout << std::endl;
 }
 
 Request::~Request()

@@ -3,12 +3,20 @@
 
 #include "Request.hpp"
 
+#include <vector>
+
 class Response
 {
 public:
     Response() = delete;
     Response(const Request& request);
     ~Response();
+
+    void print() const;
+
+    std::string status_line;
+    std::string content_type;
+    std::vector<std::string> headers;
 
     std::string response_string;
 

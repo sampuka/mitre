@@ -72,7 +72,9 @@ void ClientConnection::connection_loop()
 
             ssize_t bytes_sent = send(client_fd, response_string.c_str(), response_string.size(), 0);
 
-            std::cout << "Received:\n" << buffer << "\nResponse:\n" << response_string;
+            std::cout << "Received:\n" << buffer << std::endl;
+            std::cout << "Response:\n";
+            response.print();
             std::cout << "Response size: " << response_string.size() << " bytes_sent: " << bytes_sent << std::endl;
         }
     }

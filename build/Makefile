@@ -35,8 +35,8 @@ $(OBJ_DIR)/%.cpp.o: $(SRC_DIR)/%.cpp Makefile
 	mkdir -p $(@D)
 	$(CXX) $(CXX_FLAGS) -MMD -c $< -o $@
 
-install:
-	@echo "To be made lol"
+install: all
+	cp $(BIN_DIR)/mitre /usr/local/bin/
 
 clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)

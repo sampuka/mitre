@@ -5,8 +5,10 @@
 #include <sstream>
 #include <iostream>
 
-Request::Request(std::string request_string)
+Request::Request(std::string request_string, std::string client_ip_)
 {
+    client_ip = client_ip_;
+
     std::vector<std::string> header_fields = split_string(request_string, "\r\n");
 
     if (header_fields.size() == 0)

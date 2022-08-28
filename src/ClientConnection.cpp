@@ -4,16 +4,18 @@
 #include "Response.hpp"
 
 #include <sys/socket.h>
+#include <netinet/in.h>
 #include <cstring>
 #include <iostream>
 #include <string>
 #include <vector>
 
-ClientConnection::ClientConnection(int client_fd_)
+ClientConnection::ClientConnection(int client_fd_, std::string client_ip_)
 {
     std::cout << "Creating client connection..." << std::endl;
 
     client_fd = client_fd_;
+    client_ip = client_ip_;
     connection_thread = std::thread(&ClientConnection::connection_loop, this);
 
     std::cout << "Created client connection" << std::endl;
@@ -64,7 +66,7 @@ void ClientConnection::connection_loop()
         {
             buffer[5000] = '\n';
 
-            Request request(buffer);
+            Request request(buffer, client_ip);
 
             Response response(request);
 

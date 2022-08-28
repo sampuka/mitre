@@ -29,7 +29,7 @@ DEP = $(OBJ:%.o=%.d)
 
 all: $(OBJ) Makefile
 	mkdir -p $(BIN_DIR)
-	$(CXX) $(LD_FLAGS) -o $(BIN_DIR)/mitre $(OBJ)
+	$(CXX) $(LD_FLAGS) -o $(BIN_DIR)/mitre $(OBJ) -pthread
 
 $(OBJ_DIR)/%.cpp.o: $(SRC_DIR)/%.cpp Makefile
 	mkdir -p $(@D)

@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 #include <cstring>
 #include <iostream>
@@ -105,7 +107,8 @@ void ServerCore::accept_connections()
         else
         {
             std::lock_guard<std::mutex> guard(connections_mutex);
-            connections.emplace_back(std::make_unique<ClientConnection>(client_fd));
+            struct in_addr ip = reinterpret_cast<struct sockaddr_in*>(&client_addr)->sin_addr;
+            connections.emplace_back(std::make_unique<ClientConnection>(client_fd, inet_ntoa(ip)));
         }
     }
 }

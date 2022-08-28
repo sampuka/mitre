@@ -17,6 +17,7 @@ LD_FLAGS :=
 CXX_SOURCES := \
 	mitre.cpp \
 	ServerCore.cpp \
+	Configuration.cpp \
 	ClientConnection.cpp \
 	Request.cpp \
 	Response.cpp \

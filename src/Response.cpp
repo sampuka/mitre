@@ -1,5 +1,7 @@
 #include "Response.hpp"
 
+#include "Configuration.hpp"
+
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -62,7 +64,7 @@ void Response::construct_get_response()
     {
         document_path = "/404.html";
 
-        std::ifstream not_found_document("www" + document_path);
+        std::ifstream not_found_document(global_conf.webroot + document_path);
 
         if (not_found_document.is_open())
         {
@@ -78,6 +80,11 @@ void Response::construct_get_response()
         }
 
         content_type = "text/html";
+    }
+
+    if (content_type == "text/html")
+    {
+        replace_tokens(response_body);
     }
 
     headers.push_back("Content-Length: " + std::to_string(response_body.size()));
@@ -112,5 +119,60 @@ void Response::print() const
     for (const std::string& header : headers)
     {
         std::cout << header << '\n';
+    }
+}
+
+void Response::replace_tokens(std::string& str)
+{
+    for (const std::pair<std::string, std::string>& redirect : global_conf.redirects)
+    {
+        std::string token = "<!-- " + redirect.first + " -->";
+
+        size_t loc = str.find(token);
+
+        std::stringstream buffer;
+
+        std::ifstream token_file(global_conf.auxroot + redirect.second);
+
+        buffer << token_file.rdbuf();
+
+        std::string token_replacement = buffer.str();
+
+        while (loc != std::string::npos)
+        {
+            str.replace(loc, token.size(), token_replacement);
+
+            loc = str.find(token);
+        }
+    }
+
+    {
+        std::string token = "<!-- CLIENT_IP -->";
+
+        size_t loc = str.find(token);
+
+        std::string token_replacement = request.client_ip;
+
+        while (loc != std::string::npos)
+        {
+            str.replace(loc, token.size(), token_replacement);
+
+            loc = str.find(token);
+        }
+    }
+
+    {
+        std::string token = "<!-- CLIENT_USER_AGENT -->";
+
+        size_t loc = str.find(token);
+
+        std::string token_replacement = request.user_agent;
+
+        while (loc != std::string::npos)
+        {
+            str.replace(loc, token.size(), token_replacement);
+
+            loc = str.find(token);
+        }
     }
 }

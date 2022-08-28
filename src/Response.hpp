@@ -23,6 +23,8 @@ public:
 private:
     const Request& request;
     void construct_get_response();
+
+    void replace_tokens(std::string& response_body);
 };
 
 #endif

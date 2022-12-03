@@ -5,6 +5,7 @@
 
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <unistd.h>
 #include <cstring>
 #include <iostream>
 #include <string>
@@ -26,14 +27,7 @@ ClientConnection::~ClientConnection()
     std::cout << "Closing client connection..." << std::endl;
     shutdown_signal = true;
 
-    if (client_fd != -1)
-    {
-        if (shutdown(client_fd, SHUT_RDWR) == -1)
-        {
-            std::cout << "Error closing client connection: " << strerror(errno) << std::endl;
-        }
-        client_fd = -1;
-    }
+    close_socket();
 
     connection_thread.join();
 
@@ -56,7 +50,7 @@ void ClientConnection::connection_loop()
         {
             // Thread shutdown orderly
             shutdown_signal = true;
-            client_fd = -1;
+            close_socket();
         }
         else if (bytes_received == -1)
         {
@@ -79,5 +73,17 @@ void ClientConnection::connection_loop()
             response.print();
             std::cout << "Response size: " << response_string.size() << " bytes_sent: " << bytes_sent << std::endl;
         }
+    }
+}
+
+void ClientConnection::close_socket()
+{
+    if (client_fd != -1)
+    {
+        if (close(client_fd) == -1)
+        {
+            std::cout << "Error closing client connection: " << strerror(errno) << std::endl;
+        }
+        client_fd = -1;
     }
 }

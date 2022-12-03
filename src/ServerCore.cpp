@@ -76,7 +76,7 @@ ServerCore::~ServerCore()
     // Close all connections
     connections.clear();
 
-    if (shutdown(server_fd, SHUT_RDWR) == -1)
+    if (close(server_fd) == -1)
     {
         std::cout << "Failed to close server file descriptor: " << strerror(errno) << std::endl;
     }

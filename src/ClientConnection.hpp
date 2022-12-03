@@ -18,6 +18,8 @@ private:
     void connection_loop();
     std::thread connection_thread;
 
+    void close_socket();
+
     bool shutdown_signal = false;
 };
 

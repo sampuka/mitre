@@ -1,17 +1,13 @@
 # Compiles the entirety of mitre
 
-MAJOR_VERSION := 0
-MINOR_VERSION := 1
-PATCH_VERSION := 0
-
-ROOT_DIR := ..
+ROOT_DIR := .
 SRC_DIR := $(ROOT_DIR)/src
 OBJ_DIR := obj
 BIN_DIR := bin
 
 CXX := g++
 
-CXX_FLAGS := -std=c++20 -O0 -Wall -Wextra -DMAJOR_VERSION=$(MAJOR_VERSION) -DMINOR_VERSION=$(MINOR_VERSION) -DPATCH_VERSION=$(PATCH_VERSION)
+CXX_FLAGS := -std=c++20 -O0 -Wall -Wextra
 LD_FLAGS :=
 
 CXX_SOURCES := \

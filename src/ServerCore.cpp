@@ -1,5 +1,7 @@
 #include "ServerCore.hpp"
 
+#include "Configuration.hpp"
+
 #include <netdb.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -19,7 +21,7 @@ ServerCore::ServerCore()
     hints.ai_socktype = SOCK_STREAM; // TCP
     hints.ai_flags = AI_PASSIVE;     // Listen on this computer
 
-    int getaddrinfo_status = getaddrinfo(nullptr, "80", &hints, &server_info);
+    int getaddrinfo_status = getaddrinfo(nullptr, conf.port.c_str(), &hints, &server_info);
 
     if (getaddrinfo_status != 0)
     {
@@ -44,19 +46,19 @@ ServerCore::ServerCore()
         exit(1);
     }
 
-    std::cout << "Binding to port " << listen_port << "..." << std::endl;
+    std::cout << "Binding to port " << conf.port << "..." << std::endl;
 
     int bind_status = bind(server_fd, server_info->ai_addr, server_info->ai_addrlen);
 
     if (bind_status == -1)
     {
-        std::cout << "Failed to bind to port " << listen_port << ": " << strerror(errno) << std::endl;
+        std::cout << "Failed to bind to port " << conf.port << ": " << strerror(errno) << std::endl;
         exit(1);
     }
 
     std::cout << "Accepting packages..." << std::endl;
 
-    int listen_status = listen(server_fd, listen_backlog_size);
+    int listen_status = listen(server_fd, conf.listen_backlog_size);
 
     if (listen_status == -1)
     {

@@ -74,7 +74,3 @@ Request::Request(std::string request_string, std::string client_ip_)
         }
     }
 }
-
-Request::~Request()
-{
-}

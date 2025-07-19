@@ -10,7 +10,6 @@ class Response
 public:
     Response() = delete;
     Response(const Request& request);
-    ~Response();
 
     void print() const;
 

@@ -23,8 +23,6 @@ private:
     bool shutdown_signal = false;
 
     struct addrinfo* server_info = nullptr;
-    const char* listen_port = "80";
-    const int listen_backlog_size = 10;
 
     int server_fd = -1;
 

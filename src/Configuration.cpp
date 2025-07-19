@@ -5,8 +5,6 @@
 #include <fstream>
 #include <sstream>
 
-Configuration global_conf("mitre.conf");
-
 Configuration::Configuration(std::string conf_filepath)
 {
     std::ifstream conf_file(conf_filepath);
@@ -28,23 +26,15 @@ Configuration::Configuration(std::string conf_filepath)
 
         std::vector<std::string> conf_words = split_string(conf_line, " ");
 
-        if (conf_words.at(0) == "webroot" && conf_words.size() == 2)
+        if (conf_words.size() == 2 && conf_words.at(0) == "port")
         {
-            webroot = conf_words.at(1);
+            port = conf_words.at(1);
         }
-        else if (conf_words.at(0) == "auxroot" && conf_words.size() == 2)
-        {
-            auxroot = conf_words.at(1);
-        }
-        else if (conf_words.at(0) == "redirect" && conf_words.size() == 3)
+        else if (conf_words.size() == 3 && conf_words.at(0) == "redirect")
         {
             redirects.push_back({conf_words.at(1), conf_words.at(2)});
         }
     }
-}
-
-Configuration::~Configuration()
-{
 }
 
 std::string Configuration::get_replacement(std::string key)

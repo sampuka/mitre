@@ -8,7 +8,6 @@ class Request
 public:
     Request() = delete;
     Request(std::string request_string, std::string client_ip_);
-    ~Request();
 
     std::string request_type;
     std::string requested_document;

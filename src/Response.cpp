@@ -16,13 +16,11 @@ Response::Response(const Request& request_) : request(request_)
     }
 }
 
-Response::~Response()
-{
-}
-
 void Response::construct_get_response()
 {
     std::string document_path = request.requested_document;
+
+    // TODO: VULNERABILITY
 
     if (document_path == "/")
     {
@@ -35,7 +33,7 @@ void Response::construct_get_response()
 
     headers.clear();
 
-    std::ifstream document_file("www" + document_path);
+    std::ifstream document_file(conf.webroot + document_path);
 
     bool file_success = document_file.is_open();
 
@@ -64,7 +62,7 @@ void Response::construct_get_response()
     {
         document_path = "/404.html";
 
-        std::ifstream not_found_document(global_conf.webroot + document_path);
+        std::ifstream not_found_document(conf.webroot + document_path);
 
         if (not_found_document.is_open())
         {
@@ -124,7 +122,7 @@ void Response::print() const
 
 void Response::replace_tokens(std::string& str)
 {
-    for (const std::pair<std::string, std::string>& redirect : global_conf.redirects)
+    for (const std::pair<std::string, std::string>& redirect : conf.redirects)
     {
         std::string token = "<!-- " + redirect.first + " -->";
 
@@ -132,7 +130,7 @@ void Response::replace_tokens(std::string& str)
 
         std::stringstream buffer;
 
-        std::ifstream token_file(global_conf.auxroot + redirect.second);
+        std::ifstream token_file(conf.resources + redirect.second);
 
         buffer << token_file.rdbuf();
 

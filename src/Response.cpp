@@ -144,7 +144,7 @@ void Response::replace_tokens(std::string& str)
 
         std::stringstream buffer;
 
-        std::ifstream token_file(conf.resources + redirect.second);
+        std::ifstream token_file(conf.root + redirect.second);
 
         buffer << token_file.rdbuf();
 

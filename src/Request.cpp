@@ -5,10 +5,8 @@
 #include <sstream>
 #include <iostream>
 
-Request::Request(std::string request_string, std::string client_ip_)
+Request::Request(std::string request_string)
 {
-    client_ip = client_ip_;
-
     std::vector<std::string> header_fields = split_string(request_string, "\r\n");
 
     if (header_fields.size() == 0)
@@ -71,6 +69,42 @@ Request::Request(std::string request_string, std::string client_ip_)
         else if (name == "Connection")
         {
             connection_type = value;
+        }
+        else if (name == "Cf-Connecting-Ip")
+        {
+            connecting_ip = value;
+        }
+        else if (name == "Cf-Ipcity")
+        {
+            city = value;
+        }
+        else if (name == "Cf-Ipcontinent")
+        {
+            continent = value;
+        }
+        else if (name == "Cf-Ipcountry")
+        {
+            country = value;
+        }
+        else if (name == "Cf-Iplatitude")
+        {
+            latitude = value;
+        }
+        else if (name == "Cf-Iplongitude")
+        {
+            longitude = value;
+        }
+        else if (name == "Cf-Postal-Code")
+        {
+            postal_code = value;
+        }
+        else if (name == "Cf-Region")
+        {
+            region = value;
+        }
+        else if (name == "Cf-Timezone")
+        {
+            timezone = value;
         }
     }
 }

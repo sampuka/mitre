@@ -7,7 +7,7 @@ class Request
 {
 public:
     Request() = delete;
-    Request(std::string request_string, std::string client_ip_);
+    Request(std::string request_string);
 
     std::string request_type;
     std::string requested_document;
@@ -18,7 +18,16 @@ public:
     std::string accept_langs;
     std::string connection_type;
 
-    std::string client_ip;
+    // Cloudflare values
+    std::string connecting_ip;
+    std::string city;
+    std::string continent;
+    std::string country;
+    std::string latitude;
+    std::string longitude;
+    std::string postal_code;
+    std::string region;
+    std::string timezone;
 };
 
 #endif

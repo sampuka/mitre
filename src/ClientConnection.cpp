@@ -54,7 +54,7 @@ void ClientConnection::connection_loop()
         {
             buffer[5000] = '\n';
 
-            Request request(buffer, client_ip);
+            Request request(buffer);
 
             Response response(request);
 

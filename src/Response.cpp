@@ -159,11 +159,11 @@ void Response::replace_tokens(std::string& str)
     }
 
     {
-        std::string token = "<!-- CLIENT_IP -->";
+        std::string token = "<!-- CLIENT_USER_AGENT -->";
 
         size_t loc = str.find(token);
 
-        std::string token_replacement = request.client_ip;
+        std::string token_replacement = request.user_agent;
 
         while (loc != std::string::npos)
         {
@@ -174,11 +174,41 @@ void Response::replace_tokens(std::string& str)
     }
 
     {
-        std::string token = "<!-- CLIENT_USER_AGENT -->";
+        std::string token = "<!-- CLIENT_IP -->";
 
         size_t loc = str.find(token);
 
-        std::string token_replacement = request.user_agent;
+        std::string token_replacement = request.connecting_ip;
+
+        while (loc != std::string::npos)
+        {
+            str.replace(loc, token.size(), token_replacement);
+
+            loc = str.find(token);
+        }
+    }
+
+    {
+        std::string token = "<!-- CLIENT_CITY -->";
+
+        size_t loc = str.find(token);
+
+        std::string token_replacement = request.city;
+
+        while (loc != std::string::npos)
+        {
+            str.replace(loc, token.size(), token_replacement);
+
+            loc = str.find(token);
+        }
+    }
+
+    {
+        std::string token = "<!-- CLIENT_COUNTRY -->";
+
+        size_t loc = str.find(token);
+
+        std::string token_replacement = request.country;
 
         while (loc != std::string::npos)
         {

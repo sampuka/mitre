@@ -11,7 +11,7 @@ public:
     Response() = delete;
     Response(const Request& request);
 
-    void print() const;
+    std::string print() const;
 
     std::string status_line;
     std::string content_type;

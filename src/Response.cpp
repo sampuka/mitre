@@ -49,13 +49,25 @@ void Response::construct_get_response()
         {
             content_type = "text/html";
         }
+        else if (document_path.ends_with(".css"))
+        {
+            content_type = "text/css";
+        }
         else if (document_path.ends_with(".ico"))
         {
             content_type = "image/x-icon";
         }
+        else if (document_path.ends_with(".svg"))
+        {
+            content_type = "image/svg+xml";
+        }
+        else if (document_path.ends_with(".png"))
+        {
+            content_type = "image/png";
+        }
         else
         {
-            std::cout << "Serving content of unknown type!" << std::endl;
+            std::printf("Serving content of unknown type! (%s)\n", document_path.c_str());
         }
     }
     else
@@ -110,14 +122,16 @@ void Response::construct_get_response()
     response_string += crlf + response_body + crlf;
 }
 
-void Response::print() const
+std::string Response::print() const
 {
-    std::cout << status_line << '\n';
+    std::string str = status_line + '\n';
 
     for (const std::string& header : headers)
     {
-        std::cout << header << '\n';
+        str += header + '\n';
     }
+
+    return str;
 }
 
 void Response::replace_tokens(std::string& str)

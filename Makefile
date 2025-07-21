@@ -7,7 +7,7 @@ BIN_DIR := bin
 
 CXX := g++
 
-CXX_FLAGS := -std=c++20 -O0 -Wall -Wextra
+CXX_FLAGS := -std=c++20 -O0 -Wall -Wextra -Werror
 LD_FLAGS :=
 
 CXX_SOURCES := \

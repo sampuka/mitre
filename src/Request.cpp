@@ -13,7 +13,7 @@ Request::Request(std::string request_string, std::string client_ip_)
 
     if (header_fields.size() == 0)
     {
-        std::cout << "Empty request!!!" << std::endl;
+        std::printf("Empty request!!!\n");
         return;
     }
 
@@ -25,12 +25,12 @@ Request::Request(std::string request_string, std::string client_ip_)
 
         if (request_line_words.size() != 3)
         {
-            std::cout << "Request line length not 3:\n";
+            std::string str = "Request line length not 3:\n";
             for (const std::string& word : request_line_words)
             {
-                std::cout << word << '\n';
+                str += word + '\n';
             }
-            std::cout << std::endl;
+            std::printf("%s\n", str.c_str());
             return;
         }
 

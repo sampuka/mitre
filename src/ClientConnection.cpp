@@ -7,31 +7,25 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <cstring>
-#include <iostream>
+#include <cstdio>
+//#include <iostream>
 #include <string>
 #include <vector>
 
 ClientConnection::ClientConnection(int client_fd_, std::string client_ip_)
 {
-    std::cout << "Creating client connection..." << std::endl;
-
     client_fd = client_fd_;
     client_ip = client_ip_;
     connection_thread = std::thread(&ClientConnection::connection_loop, this);
-
-    std::cout << "Created client connection" << std::endl;
 }
 
 ClientConnection::~ClientConnection()
 {
-    std::cout << "Closing client connection..." << std::endl;
     shutdown_signal = true;
 
     close_socket();
 
     connection_thread.join();
-
-    std::cout << "Closed client connection" << std::endl;
 }
 
 void ClientConnection::connection_loop()
@@ -54,7 +48,7 @@ void ClientConnection::connection_loop()
         }
         else if (bytes_received == -1)
         {
-            std::cout << "Error receiving bytes: " << strerror(errno) << std::endl;
+            std::printf("Error receiving bytes: %s\n", strerror(errno));
         }
         else
         {
@@ -68,10 +62,7 @@ void ClientConnection::connection_loop()
 
             ssize_t bytes_sent = send(client_fd, response_string.c_str(), response_string.size(), 0);
 
-            std::cout << "Received:\n" << buffer << std::endl;
-            std::cout << "Response:\n";
-            response.print();
-            std::cout << "Response size: " << response_string.size() << " bytes_sent: " << bytes_sent << std::endl;
+            std::printf("Received:\n%sResponse:\n%sResponse size: %u bytes_sent: %u\n\n", buffer, response.print().c_str(), response_string.size(), bytes_sent);
         }
     }
 }
@@ -82,7 +73,7 @@ void ClientConnection::close_socket()
     {
         if (close(client_fd) == -1)
         {
-            std::cout << "Error closing client connection: " << strerror(errno) << std::endl;
+            std::printf("Error closing client connection: %s\n", strerror(errno));
         }
         client_fd = -1;
     }

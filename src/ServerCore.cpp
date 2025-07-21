@@ -25,7 +25,7 @@ ServerCore::ServerCore()
 
     if (getaddrinfo_status != 0)
     {
-        std::cout << "Failed to get address info: " << gai_strerror(getaddrinfo_status) << std::endl;
+        std::printf("Failed to get address info: %s\n", gai_strerror(getaddrinfo_status));
         exit(1);
     }
 
@@ -33,7 +33,7 @@ ServerCore::ServerCore()
 
     if (server_fd == -1)
     {
-        std::cout << "Failed to create socket: " << strerror(errno) << std::endl;
+        std::printf("Failed to create socket: %s\n", strerror(errno));
         exit(1);
     }
 
@@ -42,27 +42,27 @@ ServerCore::ServerCore()
 
     if (setsockopt_status == -1)
     {
-        std::cout << "Failed to set socket options: " << strerror(errno) << std::endl;
+        std::printf("Failed to set socket options: %s\n", strerror(errno));
         exit(1);
     }
 
-    std::cout << "Binding to port " << conf.port << "..." << std::endl;
+    std::printf("Failed to set socket options: %s...\n", conf.port.c_str());
 
     int bind_status = bind(server_fd, server_info->ai_addr, server_info->ai_addrlen);
 
     if (bind_status == -1)
     {
-        std::cout << "Failed to bind to port " << conf.port << ": " << strerror(errno) << std::endl;
+        std::printf("Failed to bind to port %s: %s\n", conf.port.c_str(), strerror(errno));
         exit(1);
     }
 
-    std::cout << "Accepting packages..." << std::endl;
+    std::printf("Accepting packages...");
 
     int listen_status = listen(server_fd, conf.listen_backlog_size);
 
     if (listen_status == -1)
     {
-        std::cout << "Failed to bind to listen on socket: " << strerror(errno) << std::endl;
+        std::printf("Failed to bind to listen on socket: %s\n", strerror(errno));
         exit(1);
     }
 
@@ -80,7 +80,7 @@ ServerCore::~ServerCore()
 
     if (close(server_fd) == -1)
     {
-        std::cout << "Failed to close server file descriptor: " << strerror(errno) << std::endl;
+        std::printf("Failed to close server file descriptor: %s\n", strerror(errno));
     }
 
     accept_connections_thread.join();
@@ -102,7 +102,7 @@ void ServerCore::accept_connections()
         {
             if (!shutdown_signal)
             {
-                std::cout << "Failed to accept a connection: " << strerror(errno) << std::endl;
+                std::printf("Failed to accept a connection: %s\n", strerror(errno));
                 continue;
             }
         }

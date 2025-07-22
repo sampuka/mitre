@@ -13,14 +13,14 @@ public:
 
     std::string get_replacement(std::string key);
 
-    const std::string root = "mitre/";
-    const std::string webroot = "mitre/www/";
+    const std::string root = "/mitre/";
+    const std::string webroot = "/mitre/www/";
     std::string port = "60053";
     const int listen_backlog_size = 10;
 
     std::vector<std::pair<std::string, std::string>> redirects;
 };
 
-inline Configuration conf("mitre/mitre.conf");
+inline Configuration conf("/mitre/mitre.conf");
 
 #endif

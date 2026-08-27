@@ -46,7 +46,7 @@ ServerCore::ServerCore()
         exit(1);
     }
 
-    std::printf("Failed to set socket options: %s...\n", conf.port.c_str());
+    std::printf("Socket options configured for port %s\n", conf.port.c_str());
 
     int bind_status = bind(server_fd, server_info->ai_addr, server_info->ai_addrlen);
 

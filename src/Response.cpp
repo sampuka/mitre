@@ -84,6 +84,10 @@ void Response::construct_get_response()
         {
             content_type = "image/png";
         }
+        else if (document_path.ends_with(".js"))
+        {
+            content_type = "text/javascript";
+        }
         else
         {
             std::printf("Serving content of unknown type! (%s)\n", document_path.c_str());

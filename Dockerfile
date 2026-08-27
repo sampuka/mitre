@@ -10,7 +10,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN make
+RUN make clean && make
 
 FROM debian:bookworm-slim
 

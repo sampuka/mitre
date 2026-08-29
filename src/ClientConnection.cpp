@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <chrono>
 #include <cstring>
 #include <cstdio>
 //#include <iostream>
@@ -49,6 +50,7 @@ void ClientConnection::connection_loop()
         else if (bytes_received == -1)
         {
             std::printf("Error receiving bytes: %s\n", strerror(errno));
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
         else
         {

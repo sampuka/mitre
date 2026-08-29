@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 
 #include <cstring>
+#include <chrono>
 #include <iostream>
 
 ServerCore::ServerCore()
@@ -103,6 +104,7 @@ void ServerCore::accept_connections()
             if (!shutdown_signal)
             {
                 std::printf("Failed to accept a connection: %s\n", strerror(errno));
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 continue;
             }
         }
@@ -119,19 +121,23 @@ void ServerCore::handle_connections()
 {
     while(1)
     {
-        std::lock_guard<std::mutex> guard(connections_mutex);
-
-        for (auto it = connections.begin(); it != connections.end();)
         {
-            std::unique_ptr<ClientConnection>& client = *it;
-            if (client->client_fd == -1)
+            std::lock_guard<std::mutex> guard(connections_mutex);
+
+            for (auto it = connections.begin(); it != connections.end();)
             {
-                it = connections.erase(it);
-            }
-            else
-            {
-                it++;
+                std::unique_ptr<ClientConnection>& client = *it;
+                if (client->client_fd == -1)
+                {
+                    it = connections.erase(it);
+                }
+                else
+                {
+                    it++;
+                }
             }
         }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
